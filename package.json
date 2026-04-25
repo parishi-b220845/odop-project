@@ -1,0 +1,24 @@
+{
+  "name": "odop-marketplace",
+  "version": "1.0.0",
+  "description": "One District One Product - E-commerce Platform for Indian Artisans",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "migrate": "cd backend && node migrations/run.js",
+    "migrate:reset": "cd backend && node migrations/reset.js",
+    "seed": "cd backend && node seeds/run.js",
+    "seed:csv": "cd backend && node seeds/000_import_csv.js",
+    "seed:bulk": "cd backend && node seeds/000_import_csv.js && node seeds/run.js && node seeds/002_bulk_data.js",
+    "seed:all": "cd backend && node seeds/000_import_csv.js && node seeds/run.js && node seeds/002_bulk_data.js",
+    "setup": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "setup:db": "npm run migrate && npm run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

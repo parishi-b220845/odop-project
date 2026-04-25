@@ -1,0 +1,57 @@
+services:
+  - type: web
+    name: odop-marketplace
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DB_HOST
+        fromDatabase:
+          name: odop-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: odop-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: odop-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: odop-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: odop-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 30d
+      - key: RAZORPAY_KEY_ID
+        value: ""
+      - key: RAZORPAY_KEY_SECRET
+        value: ""
+      - key: MAX_FILE_SIZE
+        value: "5242880"
+      - key: UPLOAD_DIR
+        value: uploads
+    disk:
+      name: uploads
+      mountPath: /app/backend/uploads
+      sizeGB: 1
+
+databases:
+  - name: odop-db
+    plan: free
+    databaseName: odop_marketplace
+    user: odop_user
