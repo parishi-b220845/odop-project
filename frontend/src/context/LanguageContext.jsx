@@ -1,0 +1,211 @@
+import { createContext, useContext, useState, useCallback } from 'react';
+
+const en = {
+  searchPlaceholder: 'Search crafts, states, artisans...',
+  products: 'Products', explore: 'Explore', stories: 'Stories',
+  signIn: 'Sign In', joinFree: 'Join Free', myOrders: 'My Orders',
+  profile: 'Profile', logout: 'Logout', support: 'Support',
+  sellerDashboard: 'Seller Dashboard', adminPanel: 'Admin Panel', cart: 'Cart',
+  listeningPrompt: 'Listening… Speak now', voiceNotSupported: 'Voice search not supported in this browser',
+  topBanner: '🏺 Supporting 106+ ODOP products across 27 states —', exploreMap: "Explore India's Craft Map",
+  heroTitle: "Discover India's", heroTitleHighlight: 'Authentic Crafts',
+  heroSubtitle: 'Connect directly with artisans across 700+ districts. Every purchase preserves a tradition.',
+  shopNow: 'Shop Now', exploreCrafts: 'Explore Craft Map', featuredProducts: 'Featured Products', viewAll: 'View All',
+  whyOdop: 'Why ODOP?', directFromArtisans: 'Direct from Artisans', giTagged: 'GI Tagged Products',
+  supportRuralIndia: 'Support Rural India', craftByState: 'Crafts by State',
+  filterByCategory: 'Category', filterByState: 'State', sortBy: 'Sort By',
+  priceRange: 'Price Range', giTagOnly: 'GI Tag Only', applyFilters: 'Apply Filters', clearFilters: 'Clear Filters',
+  noProducts: 'No products found', addToCart: 'Add to Cart', buyNow: 'Buy Now',
+  inStock: 'In Stock', outOfStock: 'Out of Stock', reviews: 'Reviews',
+  artisanStory: 'Artisan Story', productDetails: 'Product Details', freeShipping: 'Free Shipping',
+  handmade: 'Handmade', odopCertified: 'ODOP Certified',
+  yourCart: 'Your Cart', emptyCart: 'Your cart is empty', continueShopping: 'Continue Shopping',
+  proceedToCheckout: 'Proceed to Checkout', checkout: 'Checkout', shippingAddress: 'Shipping Address',
+  orderSummary: 'Order Summary', placeOrder: 'Place Order', payWithRazorpay: 'Pay with Razorpay',
+  subtotal: 'Subtotal', shipping: 'Shipping', tax: 'Tax', total: 'Total', free: 'Free',
+  myOrdersTitle: 'My Orders', orderPlaced: 'Ordered', orderConfirmed: 'Confirmed',
+  orderProcessing: 'Processing', orderShipped: 'Shipped', orderDelivered: 'Delivered',
+  orderCancelled: 'Cancelled', cancelOrder: 'Cancel Order', trackOrder: 'Track Order', orderDetails: 'Order Details',
+  culturalHub: 'Cultural Stories', storiesBehindCraft: 'Stories Behind the Craft', readArticle: 'Read Article', minRead: 'min read',
+  loading: 'Loading...', error: 'Something went wrong', back: 'Back', save: 'Save', cancel: 'Cancel',
+  submit: 'Submit', search: 'Search', login: 'Login', register: 'Register',
+};
+
+const translations = {
+  en,
+
+  hi: {
+    searchPlaceholder: 'शिल्प, राज्य, कारीगर खोजें...', products: 'उत्पाद', explore: 'खोजें', stories: 'कहानियाँ',
+    signIn: 'साइन इन', joinFree: 'निःशुल्क जुड़ें', myOrders: 'मेरे ऑर्डर', profile: 'प्रोफ़ाइल',
+    logout: 'लॉग आउट', support: 'सहायता', sellerDashboard: 'विक्रेता डैशबोर्ड', adminPanel: 'एडमिन पैनल', cart: 'कार्ट',
+    listeningPrompt: 'सुन रहा है... अभी बोलें', voiceNotSupported: 'इस ब्राउज़र में वॉइस सर्च समर्थित नहीं है',
+    topBanner: '🏺 27 राज्यों में 106+ ओडीओपी उत्पादों का समर्थन —', exploreMap: 'भारत का शिल्प मानचित्र देखें',
+    heroTitle: 'भारत की', heroTitleHighlight: 'असली शिल्पकला',
+    heroSubtitle: '700+ जिलों के कारीगरों से सीधे जुड़ें। हर खरीद एक परंपरा को बचाती है।',
+    shopNow: 'अभी खरीदें', exploreCrafts: 'शिल्प मानचित्र देखें', featuredProducts: 'विशेष उत्पाद', viewAll: 'सभी देखें',
+    whyOdop: 'ओडीओपी क्यों?', directFromArtisans: 'कारीगरों से सीधे', giTagged: 'जीआई टैग उत्पाद',
+    supportRuralIndia: 'ग्रामीण भारत का समर्थन', craftByState: 'राज्य के अनुसार शिल्प',
+    filterByCategory: 'श्रेणी', filterByState: 'राज्य', sortBy: 'क्रमबद्ध करें',
+    priceRange: 'मूल्य सीमा', giTagOnly: 'केवल जीआई टैग', applyFilters: 'फ़िल्टर लगाएं', clearFilters: 'फ़िल्टर हटाएं',
+    noProducts: 'कोई उत्पाद नहीं मिला', addToCart: 'कार्ट में जोड़ें', buyNow: 'अभी खरीदें',
+    inStock: 'स्टॉक में है', outOfStock: 'स्टॉक समाप्त', reviews: 'समीक्षाएं',
+    artisanStory: 'कारीगर की कहानी', productDetails: 'उत्पाद विवरण', freeShipping: 'मुफ़्त डिलीवरी',
+    handmade: 'हस्तनिर्मित', odopCertified: 'ओडीओपी प्रमाणित',
+    yourCart: 'आपका कार्ट', emptyCart: 'आपका कार्ट खाली है', continueShopping: 'खरीदारी जारी रखें',
+    proceedToCheckout: 'चेकआउट करें', checkout: 'चेकआउट', shippingAddress: 'शिपिंग पता',
+    orderSummary: 'ऑर्डर सारांश', placeOrder: 'ऑर्डर दें', payWithRazorpay: 'Razorpay से भुगतान करें',
+    subtotal: 'उप-कुल', shipping: 'शिपिंग', tax: 'कर', total: 'कुल', free: 'मुफ़्त',
+    myOrdersTitle: 'मेरे ऑर्डर', orderPlaced: 'ऑर्डर दिया', orderConfirmed: 'पुष्टि हुई',
+    orderProcessing: 'तैयार हो रहा है', orderShipped: 'भेज दिया', orderDelivered: 'डिलीवर हुआ',
+    orderCancelled: 'रद्द हुआ', cancelOrder: 'ऑर्डर रद्द करें', trackOrder: 'ट्रैक करें', orderDetails: 'ऑर्डर विवरण',
+    culturalHub: 'सांस्कृतिक कहानियाँ', storiesBehindCraft: 'शिल्प के पीछे की कहानियाँ', readArticle: 'लेख पढ़ें', minRead: 'मिनट पढ़ने में',
+    loading: 'लोड हो रहा है...', error: 'कुछ गलत हो गया', back: 'वापस', save: 'सहेजें', cancel: 'रद्द करें',
+    submit: 'जमा करें', search: 'खोजें', login: 'लॉगिन', register: 'पंजीकरण',
+  },
+
+  bn: {
+    searchPlaceholder: 'কারুশিল্প, রাজ্য, কারিগর খুঁজুন...', products: 'পণ্য', explore: 'অন্বেষণ', stories: 'গল্প',
+    signIn: 'সাইন ইন', joinFree: 'বিনামূল্যে যোগ দিন', myOrders: 'আমার অর্ডার', profile: 'প্রোফাইল',
+    logout: 'লগআউট', support: 'সহায়তা', sellerDashboard: 'বিক্রেতা ড্যাশবোর্ড', adminPanel: 'অ্যাডমিন প্যানেল', cart: 'কার্ট',
+    listeningPrompt: 'শুনছি... এখন বলুন', voiceNotSupported: 'এই ব্রাউজারে ভয়েস সার্চ সমর্থিত নয়',
+    topBanner: '🏺 ২৭টি রাজ্যে ১০৬+ ওডিওপি পণ্য সমর্থন করছি —', exploreMap: 'ভারতের কারুশিল্প মানচিত্র দেখুন',
+    heroTitle: 'ভারতের', heroTitleHighlight: 'খাঁটি কারুশিল্প',
+    heroSubtitle: '৭০০+ জেলার কারিগরদের সাথে সরাসরি সংযুক্ত হন। প্রতিটি কেনাকাটা একটি ঐতিহ্য রক্ষা করে।',
+    shopNow: 'এখনই কিনুন', exploreCrafts: 'কারুশিল্প মানচিত্র দেখুন', featuredProducts: 'বিশেষ পণ্য', viewAll: 'সব দেখুন',
+    whyOdop: 'ওডিওপি কেন?', directFromArtisans: 'কারিগরদের কাছ থেকে সরাসরি', giTagged: 'জিআই ট্যাগ পণ্য',
+    supportRuralIndia: 'গ্রামীণ ভারতকে সমর্থন করুন', craftByState: 'রাজ্য অনুযায়ী কারুশিল্প',
+    filterByCategory: 'বিভাগ', filterByState: 'রাজ্য', sortBy: 'সাজান', priceRange: 'মূল্য পরিসীমা',
+    giTagOnly: 'শুধু জিআই ট্যাগ', applyFilters: 'ফিল্টার প্রয়োগ করুন', clearFilters: 'ফিল্টার মুছুন',
+    noProducts: 'কোনো পণ্য পাওয়া যায়নি', addToCart: 'কার্টে যোগ করুন', buyNow: 'এখনই কিনুন',
+    inStock: 'স্টকে আছে', outOfStock: 'স্টক শেষ', reviews: 'পর্যালোচনা',
+    artisanStory: 'কারিগরের গল্প', productDetails: 'পণ্যের বিবরণ', freeShipping: 'বিনামূল্যে ডেলিভারি',
+    handmade: 'হাতে তৈরি', odopCertified: 'ওডিওপি সার্টিফাইড',
+    yourCart: 'আপনার কার্ট', emptyCart: 'আপনার কার্ট খালি', continueShopping: 'কেনাকাটা চালিয়ে যান',
+    proceedToCheckout: 'চেকআউট করুন', checkout: 'চেকআউট', shippingAddress: 'শিপিং ঠিকানা',
+    orderSummary: 'অর্ডার সারসংক্ষেপ', placeOrder: 'অর্ডার দিন', payWithRazorpay: 'Razorpay দিয়ে পেমেন্ট করুন',
+    subtotal: 'উপমোট', shipping: 'শিপিং', tax: 'কর', total: 'মোট', free: 'বিনামূল্যে',
+    myOrdersTitle: 'আমার অর্ডার', orderPlaced: 'অর্ডার দেওয়া হয়েছে', orderConfirmed: 'নিশ্চিত হয়েছে',
+    orderProcessing: 'প্রক্রিয়াধীন', orderShipped: 'পাঠানো হয়েছে', orderDelivered: 'ডেলিভারি হয়েছে',
+    orderCancelled: 'বাতিল হয়েছে', cancelOrder: 'অর্ডার বাতিল করুন', trackOrder: 'ট্র্যাক করুন', orderDetails: 'অর্ডার বিবরণ',
+    culturalHub: 'সাংস্কৃতিক গল্প', storiesBehindCraft: 'কারুশিল্পের পিছনের গল্প', readArticle: 'নিবন্ধ পড়ুন', minRead: 'মিনিট পড়ুন',
+    loading: 'লোড হচ্ছে...', error: 'কিছু ভুল হয়েছে', back: 'পিছনে', save: 'সংরক্ষণ', cancel: 'বাতিল',
+    submit: 'জমা দিন', search: 'খুঁজুন', login: 'লগইন', register: 'নিবন্ধন',
+  },
+
+  ta: {
+    searchPlaceholder: 'கைவினை, மாநிலங்கள், கைவினைஞர்கள் தேடவும்...', products: 'தயாரிப்புகள்', explore: 'ஆராயுங்கள்', stories: 'கதைகள்',
+    signIn: 'உள்நுழைக', joinFree: 'இலவசமாக சேரவும்', myOrders: 'என் ஆர்டர்கள்', profile: 'சுயவிவரம்',
+    logout: 'வெளியேறு', support: 'ஆதரவு', sellerDashboard: 'விற்பனையாளர் டாஷ்போர்டு', adminPanel: 'நிர்வாக பேனல்', cart: 'கார்ட்',
+    listeningPrompt: 'கேட்கிறோம்... இப்போது பேசுங்கள்', voiceNotSupported: 'இந்த உலாவியில் குரல் தேடல் ஆதரிக்கப்படவில்லை',
+    topBanner: '🏺 27 மாநிலங்களில் 106+ ODOP தயாரிப்புகளை ஆதரிக்கிறோம் —', exploreMap: 'இந்தியாவின் கைவினை வரைபடம்',
+    heroTitle: 'இந்தியாவின்', heroTitleHighlight: 'உண்மையான கைவினைகள்',
+    heroSubtitle: '700+ மாவட்டங்களில் கைவினைஞர்களுடன் நேரடியாக இணையுங்கள்.',
+    shopNow: 'இப்போது வாங்கவும்', exploreCrafts: 'கைவினை வரைபடம்', featuredProducts: 'சிறப்பு தயாரிப்புகள்', viewAll: 'அனைத்தையும் காண்க',
+    whyOdop: 'ODOP ஏன்?', directFromArtisans: 'கைவினைஞர்களிடமிருந்து நேரடியாக', giTagged: 'GI டேக் தயாரிப்புகள்',
+    supportRuralIndia: 'கிராமப்புற இந்தியாவை ஆதரிக்கவும்', craftByState: 'மாநிலம் வாரியாக கைவினை',
+    filterByCategory: 'வகை', filterByState: 'மாநிலம்', sortBy: 'வரிசைப்படுத்து',
+    priceRange: 'விலை வரம்பு', giTagOnly: 'GI டேக் மட்டும்', applyFilters: 'வடிகட்டிகளை பயன்படுத்து', clearFilters: 'வடிகட்டிகளை அழி',
+    noProducts: 'தயாரிப்புகள் எதுவும் கிடைக்கவில்லை', addToCart: 'கார்டில் சேர்', buyNow: 'இப்போது வாங்கவும்',
+    inStock: 'கையிருப்பில் உள்ளது', outOfStock: 'கையிருப்பு இல்லை', reviews: 'மதிப்புரைகள்',
+    artisanStory: 'கைவினைஞர் கதை', productDetails: 'தயாரிப்பு விவரங்கள்', freeShipping: 'இலவச டெலிவரி',
+    handmade: 'கையால் செய்யப்பட்டது', odopCertified: 'ODOP சான்றளிக்கப்பட்டது',
+    yourCart: 'உங்கள் கார்ட்', emptyCart: 'உங்கள் கார்ட் காலியாக உள்ளது', continueShopping: 'தொடர்ந்து வாங்கவும்',
+    proceedToCheckout: 'செக்அவுட் செய்', checkout: 'செக்அவுட்', shippingAddress: 'அனுப்பும் முகவரி',
+    orderSummary: 'ஆர்டர் சுருக்கம்', placeOrder: 'ஆர்டர் செய்', payWithRazorpay: 'Razorpay மூலம் செலுத்துங்கள்',
+    subtotal: 'துணை மொத்தம்', shipping: 'கப்பல் செலவு', tax: 'வரி', total: 'மொத்தம்', free: 'இலவசம்',
+    myOrdersTitle: 'என் ஆர்டர்கள்', orderPlaced: 'ஆர்டர் செய்யப்பட்டது', orderConfirmed: 'உறுதிப்படுத்தப்பட்டது',
+    orderProcessing: 'செயலாக்கத்தில்', orderShipped: 'அனுப்பப்பட்டது', orderDelivered: 'டெலிவரி ஆனது',
+    orderCancelled: 'ரத்து செய்யப்பட்டது', cancelOrder: 'ஆர்டரை ரத்து செய்', trackOrder: 'ட்ராக் செய்', orderDetails: 'ஆர்டர் விவரங்கள்',
+    culturalHub: 'கலாச்சார கதைகள்', storiesBehindCraft: 'கைவினையின் பின்னால் உள்ள கதைகள்', readArticle: 'கட்டுரை படிக்கவும்', minRead: 'நிமிட வாசிப்பு',
+    loading: 'ஏற்றுகிறது...', error: 'ஏதோ தவறு நடந்தது', back: 'பின்னால்', save: 'சேமி', cancel: 'ரத்து',
+    submit: 'சமர்ப்பி', search: 'தேடு', login: 'உள்நுழைக', register: 'பதிவு',
+  },
+
+  te: {
+    searchPlaceholder: 'హస్తకళలు, రాష్ట్రాలు, చేతివృత్తులవారు వెతకండి...', products: 'ఉత్పత్తులు', explore: 'అన్వేషించు', stories: 'కథలు',
+    signIn: 'సైన్ ఇన్', joinFree: 'ఉచితంగా చేరండి', myOrders: 'నా ఆర్డర్లు', profile: 'ప్రొఫైల్',
+    logout: 'లాగ్అవుట్', support: 'సహాయం', sellerDashboard: 'విక్రేత డాష్బోర్డ్', adminPanel: 'అడ్మిన్ పానెల్', cart: 'కార్ట్',
+    listeningPrompt: 'వింటున్నాను... ఇప్పుడు మాట్లాడండి', voiceNotSupported: 'ఈ బ్రౌజర్‌లో వాయిస్ సెర్చ్ మద్దతు లేదు',
+    topBanner: '🏺 27 రాష్ట్రాలలో 106+ ODOP ఉత్పత్తులకు మద్దతు —', exploreMap: 'భారత హస్తకళల మ్యాప్ చూడండి',
+    heroTitle: 'భారతదేశపు', heroTitleHighlight: 'అసలైన హస్తకళలు',
+    heroSubtitle: '700+ జిల్లాల చేతివృత్తులవారితో నేరుగా అనుసంధానమవ్వండి.',
+    shopNow: 'ఇప్పుడు కొనండి', exploreCrafts: 'హస్తకళల మ్యాప్', featuredProducts: 'విశేష ఉత్పత్తులు', viewAll: 'అన్నీ చూడండి',
+    whyOdop: 'ODOP ఎందుకు?', directFromArtisans: 'చేతివృత్తులవారి నుండి నేరుగా', giTagged: 'GI ట్యాగ్ ఉత్పత్తులు',
+    supportRuralIndia: 'గ్రామీణ భారతాన్ని ఆదుకోండి', craftByState: 'రాష్ట్రం వారీగా హస్తకళలు',
+    filterByCategory: 'వర్గం', filterByState: 'రాష్ట్రం', sortBy: 'క్రమబద్ధీకరించు',
+    priceRange: 'ధర పరిధి', giTagOnly: 'GI ట్యాగ్ మాత్రమే', applyFilters: 'ఫిల్టర్లు వర్తించు', clearFilters: 'ఫిల్టర్లు తొలగించు',
+    noProducts: 'ఉత్పత్తులేమీ కనుగొనబడలేదు', addToCart: 'కార్ట్‌కు జోడించు', buyNow: 'ఇప్పుడు కొనండి',
+    inStock: 'స్టాక్‌లో ఉంది', outOfStock: 'స్టాక్ అయిపోయింది', reviews: 'సమీక్షలు',
+    artisanStory: 'చేతివృత్తుల కథ', productDetails: 'ఉత్పత్తి వివరాలు', freeShipping: 'ఉచిత డెలివరీ',
+    handmade: 'చేతితో తయారు', odopCertified: 'ODOP సర్టిఫైడ్',
+    yourCart: 'మీ కార్ట్', emptyCart: 'మీ కార్ట్ ఖాళీగా ఉంది', continueShopping: 'కొనుగోలు కొనసాగించండి',
+    proceedToCheckout: 'చెకౌట్ చేయండి', checkout: 'చెకౌట్', shippingAddress: 'షిప్పింగ్ చిరునామా',
+    orderSummary: 'ఆర్డర్ సారాంశం', placeOrder: 'ఆర్డర్ ఇవ్వండి', payWithRazorpay: 'Razorpay తో చెల్లించండి',
+    subtotal: 'ఉప మొత్తం', shipping: 'షిప్పింగ్', tax: 'పన్ను', total: 'మొత్తం', free: 'ఉచితం',
+    myOrdersTitle: 'నా ఆర్డర్లు', orderPlaced: 'ఆర్డర్ ఇవ్వబడింది', orderConfirmed: 'నిర్ధారించబడింది',
+    orderProcessing: 'ప్రాసెస్ అవుతోంది', orderShipped: 'పంపబడింది', orderDelivered: 'డెలివరీ అయింది',
+    orderCancelled: 'రద్దు చేయబడింది', cancelOrder: 'ఆర్డర్ రద్దు చేయి', trackOrder: 'ట్రాక్ చేయి', orderDetails: 'ఆర్డర్ వివరాలు',
+    culturalHub: 'సాంస్కృతిక కథలు', storiesBehindCraft: 'హస్తకళల వెనుక కథలు', readArticle: 'వ్యాసం చదవండి', minRead: 'నిమిషాల చదువు',
+    loading: 'లోడ్ అవుతోంది...', error: 'ఏదో తప్పు జరిగింది', back: 'వెనుక', save: 'సేవ్', cancel: 'రద్దు',
+    submit: 'సమర్పించు', search: 'వెతకు', login: 'లాగిన్', register: 'నమోదు',
+  },
+
+  mr: {
+    searchPlaceholder: 'हस्तकला, राज्ये, कारागीर शोधा...', products: 'उत्पादने', explore: 'शोधा', stories: 'कथा',
+    signIn: 'साइन इन', joinFree: 'विनामूल्य सामील व्हा', myOrders: 'माझे ऑर्डर', profile: 'प्रोफाइल',
+    logout: 'लॉग आउट', support: 'मदत', sellerDashboard: 'विक्रेता डॅशबोर्ड', adminPanel: 'अॅडमिन पॅनेल', cart: 'कार्ट',
+    listeningPrompt: 'ऐकत आहे... आता बोला', voiceNotSupported: 'या ब्राउझरमध्ये व्हॉइस सर्च समर्थित नाही',
+    topBanner: '🏺 27 राज्यांमध्ये 106+ ओडीओपी उत्पादनांना पाठिंबा —', exploreMap: 'भारताचा हस्तकला नकाशा पहा',
+    heroTitle: 'भारताची', heroTitleHighlight: 'खरी हस्तकला',
+    heroSubtitle: '700+ जिल्ह्यांमधील कारागीरांशी थेट जोडा. प्रत्येक खरेदी एक परंपरा जपते.',
+    shopNow: 'आता खरेदी करा', exploreCrafts: 'हस्तकला नकाशा', featuredProducts: 'विशेष उत्पादने', viewAll: 'सर्व पहा',
+    whyOdop: 'ओडीओपी का?', directFromArtisans: 'कारागीरांकडून थेट', giTagged: 'जीआय टॅग उत्पादने',
+    supportRuralIndia: 'ग्रामीण भारताला पाठिंबा द्या', craftByState: 'राज्यनिहाय हस्तकला',
+    filterByCategory: 'श्रेणी', filterByState: 'राज्य', sortBy: 'क्रमवारी लावा',
+    priceRange: 'किंमत श्रेणी', giTagOnly: 'फक्त जीआय टॅग', applyFilters: 'फिल्टर लागू करा', clearFilters: 'फिल्टर साफ करा',
+    noProducts: 'कोणतेही उत्पादन आढळले नाही', addToCart: 'कार्टमध्ये जोडा', buyNow: 'आता खरेदी करा',
+    inStock: 'साठ्यात आहे', outOfStock: 'साठा संपला', reviews: 'पुनरावलोकने',
+    artisanStory: 'कारागीराची कथा', productDetails: 'उत्पादन तपशील', freeShipping: 'विनामूल्य डिलिव्हरी',
+    handmade: 'हस्तनिर्मित', odopCertified: 'ओडीओपी प्रमाणित',
+    yourCart: 'तुमचा कार्ट', emptyCart: 'तुमचा कार्ट रिकामा आहे', continueShopping: 'खरेदी सुरू ठेवा',
+    proceedToCheckout: 'चेकआउट करा', checkout: 'चेकआउट', shippingAddress: 'शिपिंग पत्ता',
+    orderSummary: 'ऑर्डर सारांश', placeOrder: 'ऑर्डर द्या', payWithRazorpay: 'Razorpay ने पेमेंट करा',
+    subtotal: 'उप-एकूण', shipping: 'शिपिंग', tax: 'कर', total: 'एकूण', free: 'मोफत',
+    myOrdersTitle: 'माझे ऑर्डर', orderPlaced: 'ऑर्डर दिला', orderConfirmed: 'पुष्टी झाली',
+    orderProcessing: 'प्रक्रिया होत आहे', orderShipped: 'पाठवले', orderDelivered: 'वितरित झाले',
+    orderCancelled: 'रद्द झाले', cancelOrder: 'ऑर्डर रद्द करा', trackOrder: 'ट्रॅक करा', orderDetails: 'ऑर्डर तपशील',
+    culturalHub: 'सांस्कृतिक कथा', storiesBehindCraft: 'हस्तकलेमागील कथा', readArticle: 'लेख वाचा', minRead: 'मिनिट वाचन',
+    loading: 'लोड होत आहे...', error: 'काहीतरी चूक झाली', back: 'मागे', save: 'जतन करा', cancel: 'रद्द करा',
+    submit: 'सादर करा', search: 'शोधा', login: 'लॉगिन', register: 'नोंदणी',
+  },
+};
+
+export const LANGUAGES = [
+  { code: 'en', label: 'English', native: 'English' },
+  { code: 'hi', label: 'Hindi', native: 'हिंदी' },
+  { code: 'bn', label: 'Bengali', native: 'বাংলা' },
+  { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
+  { code: 'te', label: 'Telugu', native: 'తెలుగు' },
+  { code: 'mr', label: 'Marathi', native: 'मराठी' },
+];
+
+const LanguageContext = createContext(null);
+
+export function LanguageProvider({ children }) {
+  const [lang, setLang] = useState(() => localStorage.getItem('odop_lang') || 'en');
+
+  const switchLang = useCallback((l) => {
+    setLang(l);
+    localStorage.setItem('odop_lang', l);
+  }, []);
+
+  const t = useCallback((key) => translations[lang]?.[key] ?? translations.en[key] ?? key, [lang]);
+
+  return (
+    <LanguageContext.Provider value={{ lang, switchLang, t, languages: LANGUAGES }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export const useLanguage = () => useContext(LanguageContext);

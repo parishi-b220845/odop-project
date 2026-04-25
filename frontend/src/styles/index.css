@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-body text-gray-800 bg-cream-50 antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-terracotta-500 text-white font-body font-medium rounded-lg
+    hover:bg-terracotta-600 active:bg-terracotta-700 transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-indigo-500 text-white font-body font-medium rounded-lg
+    hover:bg-indigo-600 active:bg-indigo-700 transition-all duration-200;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 border-2 border-terracotta-500 text-terracotta-600 font-body font-medium rounded-lg
+    hover:bg-terracotta-50 active:bg-terracotta-100 transition-all duration-200;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 text-gray-600 font-body font-medium rounded-lg
+    hover:bg-gray-100 transition-all duration-200;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-cream-200 overflow-hidden transition-all duration-300 hover:shadow-md;
+  }
+  .card-hover {
+    @apply card hover:-translate-y-1 hover:shadow-lg;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 bg-white border border-cream-300 rounded-lg font-body text-gray-800
+    placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-terracotta-300 focus:border-terracotta-400 transition-all;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-saffron {
+    @apply badge bg-saffron-100 text-saffron-700;
+  }
+  .badge-terracotta {
+    @apply badge bg-terracotta-100 text-terracotta-700;
+  }
+  .badge-indigo {
+    @apply badge bg-indigo-100 text-indigo-600;
+  }
+  .badge-green {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+  .section-heading {
+    @apply font-display text-3xl md:text-4xl font-semibold text-gray-900;
+  }
+  .section-subheading {
+    @apply font-body text-lg text-gray-500 mt-2;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #FEF7ED; }
+  ::-webkit-scrollbar-thumb { background: #C35831; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #A34726; }
+}
+
+/* Leaflet map overrides */
+.leaflet-container {
+  font-family: 'Outfit', sans-serif !important;
+  border-radius: 12px;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  font-family: 'Outfit', sans-serif !important;
+}
+
+/* Stagger animation helper */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
